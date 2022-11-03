@@ -13,6 +13,7 @@ use std::sync::atomic::Ordering;
 use std::time::Duration;
 use time::OffsetDateTime;
 use url::Url;
+use std::default::Default;
 
 /// AWS access credentials: access key, secret key, and optional token.
 ///
