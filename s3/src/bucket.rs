@@ -1514,7 +1514,7 @@ impl Bucket {
                                 } else {
                                     "Could not parse Key from Tag".to_string()
                                 };
-                                let value = if let Some(element) = tag.get_child("Values", ns) {
+                                let value = if let Some(element) = tag.get_child("Value", ns) {
                                     element.text()
                                 } else {
                                     "Could not parse Values from Tag".to_string()
