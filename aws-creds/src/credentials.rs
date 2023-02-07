@@ -2,9 +2,8 @@
 
 use crate::error::CredentialsError;
 use ini::Ini;
-use log::info;
+use log::debug;
 use serde::{Deserialize, Serialize};
-use serde_xml_rs as serde_xml;
 use std::collections::HashMap;
 use std::env;
 use std::ops::Deref;
@@ -193,7 +192,7 @@ impl Credentials {
     pub fn refresh(&mut self) -> Result<(), CredentialsError> {
         if let Some(expiration) = self.expiration {
             if expiration.0 <= OffsetDateTime::now_utc() {
-                info!("Refreshing credentials!");
+                debug!("Refreshing credentials!");
                 let refreshed = Credentials::default()?;
                 *self = refreshed
             }
@@ -227,8 +226,8 @@ impl Credentials {
         )?;
         let response = http_get(url.as_str())?;
         let serde_response =
-            serde_xml::from_str::<AssumeRoleWithWebIdentityResponse>(&response.text()?)?;
-        // assert!(serde_xml::from_str::<AssumeRoleWithWebIdentityResponse>(&response.text()?).unwrap());
+            quick_xml::de::from_str::<AssumeRoleWithWebIdentityResponse>(&response.text()?)?;
+        // assert!(quick_xml::de::from_str::<AssumeRoleWithWebIdentityResponse>(&response.text()?).unwrap());
 
         Ok(Credentials {
             access_key: Some(
